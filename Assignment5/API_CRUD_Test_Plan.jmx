@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="API_CRUD_Test_Plan">
+      <stringProp name="TestPlan.comments">CRUD + CSV data-driven testing for Assignment 5</stringProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="CRUD Test Group">
+        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.ramp_time">1</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <stringProp name="LoopController.loops">1</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
+          <stringProp name="HTTPSampler.domain">cybershield-backend-slt3.onrender.com</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Bearer ${token}</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="token" elementType="Argument">
+              <stringProp name="Argument.name">token</stringProp>
+              <stringProp name="Argument.value">eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zMmhaT2FYOWlheloxdm5lNEJVTnI5NUZrSVMiLCJvaWF0IjoxNzc4ODUxMTY3LCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL2N5YmVyc2hpZWxkLWZyb250ZW5kLWNoaS52ZXJjZWwuYXBwIiwiZXhwIjoxNzc4ODUxMjI3LCJmdmEiOls0MSwtMV0sImlhdCI6MTc3ODg1MTE2NywiaXNzIjoiaHR0cHM6Ly9tYWluLXdhc3AtOTYuY2xlcmsuYWNjb3VudHMuZGV2IiwibmJmIjoxNzc4ODUxMTU3LCJzaWQiOiJzZXNzXzNEbEZLMWxCR2tvZkFpVXE0NDBzS0FzQThSTyIsInN0cyI6ImFjdGl2ZSIsInN1YiI6InVzZXJfM0FKRmZsbGpJSWdXY3VrbDBwUWtHOVpXellDIiwidiI6Mn0.BanEySPiHWd3nQYcthFHM-f143tSRwtOOjLB50zEJ9qPoqzIlryu5jDOuleEux3ME6ixGWYEcimVqAQmxO493WU73H71awVvXAmehN4y731g0hk0-AmW-s0PketA7Zr22ySwhGkY2H_rHZmT9vHNE0MR93TA8aaPclywjXR3Z7chlhn_f7IPJpKJr8MuFVNZCnnCYoDgbr5clu9afHpQfpS_bGxPJxM271ySiMVjxx9kJfHoQAjppC7JOWSoCyrY5YEfcnmTUS2yK9EVMpU5uJ8ieBOVmyLZiasX3dbfE8p-bxieyttp5W8mxBmu0cF3y8iNWercOaIFoqBjONySyQ</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config">
+          <stringProp name="delimiter">,</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="filename">D:/Applications/apache-jmeter-5.6.3/apache-jmeter-5.6.3/bin/templates/courses.csv</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="variableNames">courseTitle,description,level,badge</stringProp>
+        </CSVDataSet>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST Create Course">
+          <stringProp name="HTTPSampler.path">/api/courses</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;courseTitle&quot;: &quot;${courseTitle} ${__time()}&quot;,&#xd;
+  &quot;description&quot;: &quot;${description}&quot;,&#xd;
+  &quot;level&quot;: &quot;${level}&quot;,&#xd;
+  &quot;badges&quot;: [&quot;${badge}&quot;],&#xd;
+  &quot;modules&quot;: [&#xd;
+    {&#xd;
+      &quot;title&quot;: &quot;Module 1&quot;,&#xd;
+      &quot;sections&quot;: [&#xd;
+        {&#xd;
+          &quot;title&quot;: &quot;Introduction&quot;,&#xd;
+          &quot;material&quot;: &quot;This module was created from JMeter CSV data.&quot;,&#xd;
+          &quot;urls&quot;: [],&#xd;
+          &quot;media&quot;: []&#xd;
+        }&#xd;
+      ],&#xd;
+      &quot;quiz&quot;: [&#xd;
+        {&#xd;
+          &quot;question&quot;: &quot;What is API testing?&quot;,&#xd;
+          &quot;choices&quot;: [&quot;Testing APIs&quot;, &quot;Designing logos&quot;, &quot;Writing CSS&quot;],&#xd;
+          &quot;correctIndex&quot;: 0&#xd;
+        }&#xd;
+      ],&#xd;
+      &quot;activityType&quot;: null&#xd;
+    }&#xd;
+  ]&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">courseId</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.course._id</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+            <stringProp name="JSONPostProcessor.defaultValues">COURSE_ID_NOT_FOUND</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Course By ID">
+          <stringProp name="HTTPSampler.path">/api/courses/${courseId}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="PUT Update Course">
+          <stringProp name="HTTPSampler.path">/api/courses/${courseId}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">PUT</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;courseTitle&quot;: &quot;${courseTitle} Updated ${__time()}&quot;,&#xd;
+  &quot;description&quot;: &quot;Updated by JMeter PUT request&quot;,&#xd;
+  &quot;level&quot;: &quot;basic&quot;,&#xd;
+  &quot;badges&quot;: [&quot;${badge}&quot;, &quot;updated&quot;],&#xd;
+  &quot;modules&quot;: [&#xd;
+    {&#xd;
+      &quot;title&quot;: &quot;Updated Module&quot;,&#xd;
+      &quot;sections&quot;: [&#xd;
+        {&#xd;
+          &quot;title&quot;: &quot;Updated Section&quot;,&#xd;
+          &quot;material&quot;: &quot;This course was updated using JMeter.&quot;,&#xd;
+          &quot;urls&quot;: [&quot;https://cybershieldlearningportal.vercel.app&quot;],&#xd;
+          &quot;media&quot;: []&#xd;
+        }&#xd;
+      ],&#xd;
+      &quot;quiz&quot;: [&#xd;
+        {&#xd;
+          &quot;question&quot;: &quot;Which tool is used for this API test?&quot;,&#xd;
+          &quot;choices&quot;: [&quot;JMeter&quot;, &quot;Photoshop&quot;, &quot;Excel&quot;],&#xd;
+          &quot;correctIndex&quot;: 0&#xd;
+        }&#xd;
+      ],&#xd;
+      &quot;activityType&quot;: null&#xd;
+    }&#xd;
+  ]&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">updatedTitle,putSuccess</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.course.courseTitle,$.success</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="JSONPostProcessor.defaultValues">NOT_FOUND,false</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="DELETE Course">
+          <stringProp name="HTTPSampler.path">/api/courses/${courseId}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">deleteSuccess</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.success</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="JSONPostProcessor.defaultValues">false</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET Deleted Course">
+          <stringProp name="HTTPSampler.path">/api/courses/${courseId}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor">
+            <stringProp name="JSONPostProcessor.referenceNames">deletedError</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.error</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+            <stringProp name="JSONPostProcessor.defaultValues">NOT_FOUND</stringProp>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

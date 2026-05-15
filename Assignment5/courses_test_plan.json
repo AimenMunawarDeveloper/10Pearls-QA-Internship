@@ -1,0 +1,156 @@
+{
+  "testPlan": {
+    "name": "Courses API CRUD Test Plan",
+    "baseUrl": "https://cybershield-backend-slt3.onrender.com/api",
+    "auth": {
+      "type": "Bearer Token",
+      "header": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${token}"
+      }
+    },
+    "variables": {
+      "token": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zMmhaT2FYOWlheloxdm5lNEJVTnI5NUZrSVMiLCJvaWF0IjoxNzc4ODUxMTY3LCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL2N5YmVyc2hpZWxkLWZyb250ZW5kLWNoaS52ZXJjZWwuYXBwIiwiZXhwIjoxNzc4ODUxMjI3LCJmdmEiOls0MSwtMV0sImlhdCI6MTc3ODg1MTE2NywiaXNzIjoiaHR0cHM6Ly9tYWluLXdhc3AtOTYuY2xlcmsuYWNjb3VudHMuZGV2IiwibmJmIjoxNzc4ODUxMTU3LCJzaWQiOiJzZXNzXzNEbEZLMWxCR2tvZkFpVXE0NDBzS0FzQThSTyIsInN0cyI6ImFjdGl2ZSIsInN1YiI6InVzZXJfM0FKRmZsbGpJSWdXY3VrbDBwUWtHOVpXellDIiwidiI6Mn0"
+    },
+    "csvData": {
+      "fileName": "courses.csv",
+      "delimiter": ",",
+      "ignoreFirstLine": true,
+      "recycleOnEOF": true,
+      "stopThreadOnEOF": false,
+      "variables": [
+        "courseTitle",
+        "description",
+        "level",
+        "badge"
+      ]
+    },
+    "requests": [
+      {
+        "name": "POST Create Course",
+        "method": "POST",
+        "endpoint": "/courses",
+        "expectedStatus": 201,
+        "body": {
+          "courseTitle": "${courseTitle} ${__time()}",
+          "description": "${description}",
+          "level": "${level}",
+          "badges": ["${badge}"],
+          "modules": [
+            {
+              "title": "Module 1",
+              "sections": [
+                {
+                  "title": "Introduction",
+                  "material": "This module was created from JMeter CSV data.",
+                  "urls": [],
+                  "media": []
+                }
+              ],
+              "quiz": [
+                {
+                  "question": "What is API testing?",
+                  "choices": [
+                    "Testing APIs",
+                    "Designing logos",
+                    "Writing CSS"
+                  ],
+                  "correctIndex": 0
+                }
+              ],
+              "activityType": null
+            }
+          ]
+        },
+        "extractors": {
+          "courseId": "$.course._id",
+          "createdTitle": "$.course.courseTitle",
+          "postSuccess": "$.success"
+        }
+      },
+      {
+        "name": "GET Course By ID",
+        "method": "GET",
+        "endpoint": "/courses/${courseId}",
+        "expectedStatus": 200,
+        "assertions": {
+          "success": "$.success",
+          "courseId": "$.course._id",
+          "titleMatch": "${createdTitle}"
+        }
+      },
+      {
+        "name": "PUT Update Course",
+        "method": "PUT",
+        "endpoint": "/courses/${courseId}",
+        "expectedStatus": 200,
+        "body": {
+          "courseTitle": "${courseTitle} Updated ${__time()}",
+          "description": "Updated by JMeter PUT request",
+          "level": "basic",
+          "badges": ["${badge}", "updated"],
+          "modules": [
+            {
+              "title": "Updated Module",
+              "sections": [
+                {
+                  "title": "Updated Section",
+                  "material": "This course was updated using JMeter.",
+                  "urls": [
+                    "https://cybershieldlearningportal.vercel.app"
+                  ],
+                  "media": []
+                }
+              ],
+              "quiz": [
+                {
+                  "question": "Which tool is used for this API test?",
+                  "choices": [
+                    "JMeter",
+                    "Photoshop",
+                    "Excel"
+                  ],
+                  "correctIndex": 0
+                }
+              ],
+              "activityType": null
+            }
+          ]
+        },
+        "extractors": {
+          "updatedTitle": "$.course.courseTitle",
+          "putSuccess": "$.success"
+        }
+      },
+      {
+        "name": "DELETE Course",
+        "method": "DELETE",
+        "endpoint": "/courses/${courseId}",
+        "expectedStatus": 200,
+        "extractors": {
+          "deleteSuccess": "$.success"
+        }
+      },
+      {
+        "name": "GET Deleted Course",
+        "method": "GET",
+        "endpoint": "/courses/${courseId}",
+        "expectedStatus": 404,
+        "expectedResponse": {
+          "success": false,
+          "error": "Course not found"
+        },
+        "extractors": {
+          "deletedError": "$.error"
+        }
+      }
+    ],
+    "apisUsed": [
+      "POST /api/courses",
+      "GET /api/courses/${courseId}",
+      "PUT /api/courses/${courseId}",
+      "DELETE /api/courses/${courseId}"
+    ],
+    "note": "CyberShield uses PUT for updating courses, not PATCH."
+  }
+}
